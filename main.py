@@ -17,7 +17,8 @@ def check_address(address, G):
     # If this was successful; that is, if the address is real and can be converted into coordinates
     if location:
         # Check to see that the coordinates are within the city's general bounding box
-        # City bounding box based on online resources
+        # City bounding box based on http://bboxfinder.com/#0.000000,0.000000,0.000000,0.000000
+        # This site lets you find coordinates, so we just found the broad bounds of Paris
         if 48.812103 < location.latitude < 48.904695 and 2.246475 < location.longitude < 2.422256:
             # If the location is in bounds, find the node nearest it and return it
             node = ox.distance.nearest_nodes(G, location.longitude, location.latitude)
