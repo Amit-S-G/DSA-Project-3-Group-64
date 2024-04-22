@@ -174,82 +174,87 @@ def a_star_search(startNode_id, endNode_id, G):
 
 def main():
     while True:
-        address = input("Enter a starting address: ")
-        startNode = check_address(address, G)
-        if startNode:
-            print("Sounds good!")
-            break
+        while True:
+            address = input("Enter a starting address: ")
+            startNode = check_address(address, G)
+            if startNode:
+                print("Sounds good!")
+                break
+            else:
+                print("Sorry, that address either doesn't exist, or it isn't in Paris. Rerun!")
+        while True:
+            address = input("Enter a destination address: ")
+            endNode = check_address(address, G)
+            if endNode:
+                print("Sounds good!")
+                break
+            else:
+                print("Sorry, that address either doesn't exist, or it isn't in Paris. Rerun!")
+
+        # Draw the graph for them, blank!
+        node_sizes = {startNode: 15, endNode: 15}
+
+        # Set size 0 for all other nodes
+        for node in G.nodes():
+            if node not in node_sizes:
+                node_sizes[node] = 0
+
+        ox.plot_graph(G, node_size=[node_sizes[node] for node in G.nodes()])
+        print("Here is a blank map depicting your start and end locations.")
+
+        # Ask the user to choose the algorithm
+        algorithm = input("Choose an algorithm (A*, BFS, or DFS): ").upper()
+
+        if algorithm == "A*":
+            shortest_path_result = a_star_search(startNode, endNode, G)
+        elif algorithm == "BFS":
+            shortest_path_result = bfs_shortest_path(G, startNode, endNode)
+        elif algorithm == "DFS":
+            shortest_path_result = dfs_shortest_path(G, startNode, endNode)
         else:
-            print("Sorry, that address either doesn't exist, or it isn't in Paris. Rerun!")
-    while True:
-        address = input("Enter a destination address: ")
-        endNode = check_address(address, G)
-        if endNode:
-            print("Sounds good!")
-            break
+            print("Invalid algorithm choice. Please choose either A*, BFS, or DFS.")
+
+        if shortest_path_result:
+            shortest_path_length, shortest_path_parents = shortest_path_result
+            print(f"Path length: {shortest_path_length:.2f} meters.")
+
+            # Extract the shortest path from the parents dictionary
+            shortest_path = []
+            curr_node = endNode
+            while curr_node != startNode:
+                shortest_path.append(curr_node)
+                curr_node = shortest_path_parents[curr_node][0]
+            shortest_path.append(startNode)
+            shortest_path.reverse()
+
+            print("Would you like to see nodes visited or route taken (nodes visited or route taken): ", end="")
+            user_input = input().strip()
+
+            if user_input == "route taken":
+                # Plot the graph with colored nodes and the shortest path
+                node_sizes = {startNode: 15, endNode: 15}
+                for node in G.nodes():
+                    if node not in node_sizes:
+                        node_sizes[node] = 0
+
+                ox.plot.plot_graph_route(G, node_size=[node_sizes[node] for node in G.nodes()], route=shortest_path,
+                                         show=True, save=True, filepath='street_map.png')
+            elif user_input == "nodes visited":
+                # Plot the graph with colored nodes, highlighting visited nodes in green and others in blue
+                visited_nodes = set(shortest_path_parents.keys())
+                node_colors = ['g' if node in visited_nodes else 'b' for node in G.nodes()]
+                ox.plot.plot_graph(G, node_color=node_colors, filepath='street_map.png')
+            else:
+                print("Invalid Input")
+
+            choice = input("Would you like to continue? Y/N: ")
+            if choice == "N":
+                break
+            else:
+                continue
+
         else:
-            print("Sorry, that address either doesn't exist, or it isn't in Gainesville. Rerun!")
-
-    # Draw the graph for them, blank!
-    node_sizes = {startNode: 15, endNode: 15}
-
-
-    # Set size 0 for all other nodes
-    for node in G.nodes():
-        if node not in node_sizes:
-            node_sizes[node] = 0
-
-    ox.plot_graph(G, node_size=[node_sizes[node] for node in G.nodes()])
-    print("Here is a blank map depicting your start and end locations.")
-
-    # Ask the user to choose the algorithm
-    algorithm = input("Choose an algorithm (A*, BFS, or DFS): ").upper()
-
-    if algorithm == "A*":
-        shortest_path_result = a_star_search(startNode, endNode, G)
-    elif algorithm == "BFS":
-        shortest_path_result = bfs_shortest_path(G, startNode, endNode)
-    elif algorithm == "DFS":
-        shortest_path_result = dfs_shortest_path(G, startNode, endNode)
-    else:
-        print("Invalid algorithm choice. Please choose either A*, BFS, or DFS.")
-        sys.exit()
-
-    if shortest_path_result:
-        shortest_path_length, shortest_path_parents = shortest_path_result
-        print(f"Shortest path length: {shortest_path_length:.2f} meters.")
-
-        # Extract the shortest path from the parents dictionary
-        shortest_path = []
-        curr_node = endNode
-        while curr_node != startNode:
-            shortest_path.append(curr_node)
-            curr_node = shortest_path_parents[curr_node][0]
-        shortest_path.append(startNode)
-        shortest_path.reverse()
-
-        print("Would you like to see nodes visited or route taken (nodes visited or route taken): ", end="")
-        user_input = input().strip()
-
-        if user_input == "route taken":
-            # Plot the graph with colored nodes and the shortest path
-            node_sizes = {startNode: 15, endNode: 15}
-            for node in G.nodes():
-                if node not in node_sizes:
-                    node_sizes[node] = 0
-
-            ox.plot.plot_graph_route(G, node_size=[node_sizes[node] for node in G.nodes()], route=shortest_path, show=True, save=True, filepath='street_map.png')
-        elif user_input == "nodes visited":
-            # Plot the graph with colored nodes, highlighting visited nodes in green and others in blue
-            visited_nodes = set(shortest_path_parents.keys())
-            node_colors = ['g' if node in visited_nodes else 'b' for node in G.nodes()]
-            ox.plot.plot_graph(G, node_color=node_colors, filepath='street_map.png')
-        else:
-            print("Invalid Input")
-            sys.exit()
-
-    else:
-        print("No path found.")
+            print("No path found.")
 
 if __name__ == "__main__":
     main()
