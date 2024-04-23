@@ -30,6 +30,7 @@ def check_address(address, G):
     else:
         return None
 
+#Define Depth-First Search algorithm
 def dfs_shortest_path(G, startNode_id, endNode_id):
     # Initialize a stack for DFS
     toVisit = []
@@ -62,13 +63,16 @@ def dfs_shortest_path(G, startNode_id, endNode_id):
 
     # If we did the traversal and never reached the endNode, return None
     if currNode != endNode_id:
+        print("Specific node ID not located")
         return None
-    # If we did find it
+    #If the endNode was reached
     else:
+        # Our initial length is 0
         total_length = 0
         # Iterate through the parents dict to retrace the path
         while currNode != startNode_id:
-            # Add the length of the edge used to reach currNode
+            # For each instance, the startNode's id is not equal to the current node
+            # We add the total length of the path to get to that edge
             total_length += parents[currNode][2]
             currNode = parents[currNode][0]
         return total_length, parents
@@ -110,10 +114,12 @@ def bfs_shortest_path(G, startNode_id, endNode_id):
         return None
     # If we did find it
     else:
+        # Our initial length is 0
         total_length = 0
         # Iterate through the parents dict to retrace the path
         while currNode != startNode_id:
-            # Add the length of the edge used to reach currNode
+            # For each instance, the startNode's id is not equal to the current node
+            # We add the total length of the path to get to that edge
             total_length += parents[currNode][2]
             currNode = parents[currNode][0]
         return total_length, parents
@@ -175,17 +181,24 @@ def a_star_search(startNode_id, endNode_id, G):
 def main():
     while True:
         while True:
+            # The user is prompted with inputting a starting address
+            # From that address, we check to see if it is valid
             address = input("Enter a starting address: ")
             startNode = check_address(address, G)
             if startNode:
+                # If the address the user inputs is valid, we indicate it to the user
                 print("Sounds good!")
                 break
             else:
+                # If the address is invalid, we print the statement below
+                # The user is then prompted to restart and input a new address
                 print("Sorry, that address either doesn't exist, or it isn't in Paris. Rerun!")
         while True:
+            # The user is prompted to input a valid destination, but only if the starting address is valid
             address = input("Enter a destination address: ")
             endNode = check_address(address, G)
             if endNode:
+                # If the address the user inputs is valid, we indicate it to the user
                 print("Sounds good!")
                 break
             else:
@@ -199,18 +212,21 @@ def main():
             if node not in node_sizes:
                 node_sizes[node] = 0
 
+        # Based on the G and node_size, a graph is plotted for each node in G.nodes
         ox.plot_graph(G, node_size=[node_sizes[node] for node in G.nodes()])
         print("Here is a blank map depicting your start and end locations.")
 
         # Ask the user to choose the algorithm
         algorithm = input("Choose an algorithm (A*, BFS, or DFS): ").upper()
 
+        # If the input is any of the following, the result is found by the algorithm it is set equal to
         if algorithm == "A*":
             shortest_path_result = a_star_search(startNode, endNode, G)
         elif algorithm == "BFS":
             shortest_path_result = bfs_shortest_path(G, startNode, endNode)
         elif algorithm == "DFS":
             shortest_path_result = dfs_shortest_path(G, startNode, endNode)
+        # If the input for the algorithm type is invalid, this message is prompted
         else:
             print("Invalid algorithm choice. Please choose either A*, BFS, or DFS.")
 
