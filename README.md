@@ -9,6 +9,7 @@ You will want to read this, OSMNX is _not_ simply pip-installable.
 
 You will also want NetworkX, which is pip-installable. We are not sure if installing OSMNX will for sure also install NetworkX (as NetworkX is a dependency of OSMNX), so we just want to mention it here in case.
 
-You will also need to install geopy, which is also pip-installable.
+You will also need to install geopy, which is also pip-installable. You'll need Nominatim from this, which is linked to Open Street Maps, which powers OMSNX. An article about geocoding we used is here: https://medium.com/@hazallgultekin/convert-address-to-latitude-longitude-using-python-21844da3d032
 
 That should cover all dependencies. Thank you all so much for a wonderful semester! The steetmap.png file in this repository shows an early test routing from Marston Science Library to Library West. It's just a neat little visual!
+
