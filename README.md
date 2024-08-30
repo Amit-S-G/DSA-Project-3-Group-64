@@ -1,4 +1,4 @@
-Hello there! This is thr group repository for Group 64 of Spring 2024's Data Structures and Algorithms class at UF! Our program aims to help people see what different graph search algorithms look like and how they perform. We have implemented BFS, DFS, and A* for the searching algorithms, and you can see either the route that it outputs, or the nodes it visits on a visual map. The graph and map both use Paris, France as a base, and ONLY addresses in Paris will work for this, as that is how the graph is intialized.
+Hello there! This is the group repository for Group 64 of Spring 2024's Data Structures and Algorithms class at UF! Our program aims to help people see what different graph search algorithms look like and how they perform. We have implemented BFS, DFS, and A* for the searching algorithms, and you can see either the route that it outputs, or the nodes it visits on a visual map. The graph and map both use Paris, France as a base, and ONLY addresses in Paris will work for this, as that is how the graph is intialized.
 
 You can simply run the main.py, but there are some dependencies.
 
